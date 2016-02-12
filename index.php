@@ -1,13 +1,40 @@
 <?php
 $user = 'root';
 $pass = 'root';
+$name = 'projectreddb';
+$dbh = null;
 try {
-    $dbh = new PDO('mysql:host=localhost;dbname=ProjectRedShop', $user, $pass);
-    echo 'Connected!';
-    $dbh = null;
+    $dbh = new PDO('mysql:host=localhost;dbname='.$name, $user, $pass);
+    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     print "Error!: " . $e->getMessage() . "<br/>";
     die();
+}
+
+function getToken() {
+    if (isset($_COOKIE['token'])) {
+        return $_COOKIE['token'];
+    }
+    return null;
+}
+
+
+function getAccountName($conn) {
+    $token = null;
+    if (isset($_COOKIE['token'])) {
+        $token = $_COOKIE['token'];
+    }
+    else {
+        return;
+    }
+    $sql = 'SELECT username FROM users WHERE token = ?';
+    $stmt = $conn->prepare($sql);
+    if ($stmt->execute(array($token))) {
+        while ($row = $stmt->fetch()) {
+            $username = ucfirst($row['username']);
+            echo '<a href="/settings/">'.$username.'\'s Inventory</a>';
+        }
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -19,200 +46,33 @@ try {
 </head>
 <body onscroll="toggleHeader()">
     <div class="header">
-        <!--<div class="profile">
-            <p>gamma</p>
-            <p>$5000</p>
-        </div>-->
         <img class="logo" src="res/logo.png"/>
         <div class="dropdown-btn" onclick="toggleDropdown()">
             <div id="mainDropdown" class="dropdown-content">
-                <a href="/">Launch Game</a>
-                <a href="/">Login</a>
-                <a href="/">Settings</a>
-                <a href="/">Shop</a>
+                <a href="/">Home</a>
+                <?php
+                    getAccountName($dbh);
+                ?>
+                <a href="/login">Login</a>
+                <a href="/shop">Shop</a>
+                <a href="/cart">Cart</a>
             </div>
         </div>
     </div>
 
     <div class="min-header">
-        <a href="/">Launch Game</a>
-        <a href="/">Login</a>
-        <a href="/">Settings</a>
-        <a href="/">Shop</a>
+        <a href="/">Home</a>
+        <?php
+            getAccountName($dbh);
+        ?>
+        <a href="/login">Login</a>
+        <a href="/shop">Shop</a>
+        <a href="/cart">Cart</a>
         <img class="top" src="res/top.png" onclick="scrollToTop()"/>
     </div>
 
     <div class="content">
-         <ul class="products">
-             <li class="product">
-                 <div class="product-img product-cat">
-                    <img class="product-img" src="res/pokeball.png"/>
-                 </div>
-                 <div class="product-detail product-cat">
-                     <span class="product-name">Product Name</span><br>
-                     <span class="product-price"><b>$500</b></span>
-                 </div>
-                 <div class="product-rate product-cat">
-                    <div style="width: 128px; height: 128px;">
-                        <span>4/5 Stars</span>
-                    </div>
-                 </div>
-             </li>
-             <li class="product">
-                 <div class="product-img product-cat">
-                     <img class="product-img" src="res/pokeball.png"/>
-                 </div>
-                 <div class="product-detail product-cat">
-                     <span class="product-name">Product Name</span><br>
-                     <span class="product-price"><b>$500</b></span>
-                 </div>
-                 <div class="product-rate product-cat">
-                     <div style="width: 128px; height: 128px;">
-                         <span>4/5 Stars</span>
-                     </div>
-                 </div>
-             </li>
-             <li class="product">
-                 <div class="product-img product-cat">
-                     <img class="product-img" src="res/pokeball.png"/>
-                 </div>
-                 <div class="product-detail product-cat">
-                     <span class="product-name">Product Name</span><br>
-                     <span class="product-price"><b>$500</b></span>
-                 </div>
-                 <div class="product-rate product-cat">
-                     <div style="width: 128px; height: 128px;">
-                         <span>4/5 Stars</span>
-                     </div>
-                 </div>
-             </li>
-             <li class="product">
-                 <div class="product-img product-cat">
-                     <img class="product-img" src="res/pokeball.png"/>
-                 </div>
-                 <div class="product-detail product-cat">
-                     <span class="product-name">Product Name</span><br>
-                     <span class="product-price"><b>$500</b></span>
-                 </div>
-                 <div class="product-rate product-cat">
-                     <div style="width: 128px; height: 128px;">
-                         <span>4/5 Stars</span>
-                     </div>
-                 </div>
-             </li>
-             <li class="product">
-                 <div class="product-img product-cat">
-                     <img class="product-img" src="res/pokeball.png"/>
-                 </div>
-                 <div class="product-detail product-cat">
-                     <span class="product-name">Product Name</span><br>
-                     <span class="product-price"><b>$500</b></span>
-                 </div>
-                 <div class="product-rate product-cat">
-                     <div style="width: 128px; height: 128px;">
-                         <span>4/5 Stars</span>
-                     </div>
-                 </div>
-             </li>
-             <li class="product">
-                 <div class="product-img product-cat">
-                     <img class="product-img" src="res/pokeball.png"/>
-                 </div>
-                 <div class="product-detail product-cat">
-                     <span class="product-name">Product Name</span><br>
-                     <span class="product-price"><b>$500</b></span>
-                 </div>
-                 <div class="product-rate product-cat">
-                     <div style="width: 128px; height: 128px;">
-                         <span>4/5 Stars</span>
-                     </div>
-                 </div>
-             </li>
-             <li class="product">
-                 <div class="product-img product-cat">
-                     <img class="product-img" src="res/pokeball.png"/>
-                 </div>
-                 <div class="product-detail product-cat">
-                     <span class="product-name">Product Name</span><br>
-                     <span class="product-price"><b>$500</b></span>
-                 </div>
-                 <div class="product-rate product-cat">
-                     <div style="width: 128px; height: 128px;">
-                         <span>4/5 Stars</span>
-                     </div>
-                 </div>
-             </li>
-             <li class="product">
-                 <div class="product-img product-cat">
-                     <img class="product-img" src="res/pokeball.png"/>
-                 </div>
-                 <div class="product-detail product-cat">
-                     <span class="product-name">Product Name</span><br>
-                     <span class="product-price"><b>$500</b></span>
-                 </div>
-                 <div class="product-rate product-cat">
-                     <div style="width: 128px; height: 128px;">
-                         <span>4/5 Stars</span>
-                     </div>
-                 </div>
-             </li>
-             <li class="product">
-                 <div class="product-img product-cat">
-                     <img class="product-img" src="res/pokeball.png"/>
-                 </div>
-                 <div class="product-detail product-cat">
-                     <span class="product-name">Product Name</span><br>
-                     <span class="product-price"><b>$500</b></span>
-                 </div>
-                 <div class="product-rate product-cat">
-                     <div style="width: 128px; height: 128px;">
-                         <span>4/5 Stars</span>
-                     </div>
-                 </div>
-             </li>
-             <li class="product">
-                 <div class="product-img product-cat">
-                     <img class="product-img" src="res/pokeball.png"/>
-                 </div>
-                 <div class="product-detail product-cat">
-                     <span class="product-name">Product Name</span><br>
-                     <span class="product-price"><b>$500</b></span>
-                 </div>
-                 <div class="product-rate product-cat">
-                     <div style="width: 128px; height: 128px;">
-                         <span>4/5 Stars</span>
-                     </div>
-                 </div>
-             </li>
-             <li class="product">
-                 <div class="product-img product-cat">
-                     <img class="product-img" src="res/pokeball.png"/>
-                 </div>
-                 <div class="product-detail product-cat">
-                     <span class="product-name">Product Name</span><br>
-                     <span class="product-price"><b>$500</b></span>
-                 </div>
-                 <div class="product-rate product-cat">
-                     <div style="width: 128px; height: 128px;">
-                         <span>4/5 Stars</span>
-                     </div>
-                 </div>
-             </li>
-             <li class="product">
-                 <div class="product-img product-cat">
-                     <img class="product-img" src="res/pokeball.png"/>
-                 </div>
-                 <div class="product-detail product-cat">
-                     <span class="product-name">Product Name</span><br>
-                     <span class="product-price"><b>$500</b></span>
-                 </div>
-                 <div class="product-rate product-cat">
-                     <div style="width: 128px; height: 128px;">
-                         <span>4/5 Stars</span>
-                     </div>
-                 </div>
-             </li>
-         </ul>
+
     </div>
 
     <script>

@@ -1,7 +1,13 @@
+@font-face {
+    font-family: 'pokefont';
+    src: url('../res/pokefont.ttf');
+}
+
 * {
     margin: 0;
     padding: 0;
 }
+
 body {
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
@@ -119,7 +125,51 @@ img.top:hover {
 
 img.product-img {
     width: 128px;
-    height: 128px;
+    height: 192px;
+}
+
+input.cart {
+    background: url("../res/cart.png");
+    background-size: cover;
+    width: 64px;
+    height: 64px;
+    margin-top: 32px;
+    cursor: pointer;
+}
+
+input.delete {
+    background: url("../res/delete.png");
+    background-size: cover;
+    width: 64px;
+    height: 64px;
+    margin-top: 32px;
+    cursor: pointer;
+}
+
+input.select {
+    background: url("../res/select.png");
+    background-size: cover;
+    width: 64px;
+    height: 64px;
+    margin-top: 32px;
+    cursor: pointer;
+}
+
+input.required {
+    background-color: #ffaeae;
+}
+
+input.required::-webkit-input-placeholder {
+    color:    #555;
+}
+input.required:-moz-placeholder {
+    color:    #555;
+}
+input.required::-moz-placeholder {
+    color:    #555;
+}
+input.required:-ms-input-placeholder {
+    color:    #555;
 }
 
 li.product {
@@ -137,6 +187,7 @@ div.product-cat {
 
 div.product-img {
     float: left;
+    padding: 0 5% 0 5%;
 }
 
 div.product-detail {
@@ -155,9 +206,21 @@ ul.products {
     padding: 16px;
 }
 
+span.product-name {
+    font-size: 18pt;
+}
 span.product-price {
+    font-size: 18pt;
     color: rgb(211,0,0);
 }
 
+form.account {
+    background-color: #f1f1f1;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    width: 20%;
+    display: inline-block;
+    margin: 1%;
+    padding: 2% 0 2% 0;
+}
 
 
